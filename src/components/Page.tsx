@@ -4,11 +4,11 @@ import React, {
     FunctionComponent,
     useEffect
 } from 'react';
-import { ThemeProvider, theme, CSSReset } from '@chakra-ui/core';
+import { ThemeProvider, theme, CSSReset, Box } from '@chakra-ui/core';
 import GlobalStyles from '../styles/global.styles';
 import Header from './header';
 import Router from 'next/router';
-import { firebase, googleAuthProvider } from '../lib/firebase';
+import { firebase } from '../lib/firebase';
 import { UserContext } from '../contexts/user.context';
 import UserAdapter from '../services/adapters/user';
 import appTheme from '../styles/theme';
@@ -23,13 +23,12 @@ const customTheme = {
 
 const Page: FunctionComponent = (props: any) => {
     const { user, storeLoginInfo } = useContext(UserContext);
-
     useEffect(() => {
         firebase.auth().onAuthStateChanged(async (result) => {
             if (result) {
                 const user = UserAdapter.fromFirebaseResponse(result);
                 const idToken = await result.getIdToken();
-                console.log(idToken);
+                sessionStorage.setItem('AUTH_TOKEN', idToken);
                 storeLoginInfo(user, idToken, result.refreshToken);
             } else {
                 Router.push({
@@ -43,7 +42,9 @@ const Page: FunctionComponent = (props: any) => {
             <CSSReset />
             <GlobalStyles />
             {user && <Header />}
-            <div className="container-fluid">{props.children}</div>
+            <Box className="container" pt={8}>
+                {props.children}
+            </Box>
         </ThemeProvider>
     );
 };
