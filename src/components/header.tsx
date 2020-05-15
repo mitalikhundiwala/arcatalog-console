@@ -8,6 +8,7 @@ import {
     IconButton,
     Stack
 } from '@chakra-ui/core';
+import Link from 'next/link';
 import { UserContext } from '../contexts/user.context';
 import { AiOutlineLogout } from 'react-icons/ai';
 
@@ -36,7 +37,9 @@ const Header = (props) => {
         >
             <Flex align="center" mr={5}>
                 <Heading as="h1" size="lg" letterSpacing={'-.1rem'}>
-                    Architecture Catalog
+                    <Link href="/">
+                        <a>Architecture Catalog</a>
+                    </Link>
                 </Heading>
             </Flex>
 
@@ -58,8 +61,16 @@ const Header = (props) => {
                 alignItems="center"
                 flexGrow={1}
             >
-                <MenuItems>Books</MenuItems>
-                <MenuItems>Categories</MenuItems>
+                <MenuItems>
+                    <Link href="/books">
+                        <a>Books</a>
+                    </Link>
+                </MenuItems>
+                <MenuItems>
+                    <Link href="/categories">
+                        <a>Categories</a>
+                    </Link>
+                </MenuItems>
                 <MenuItems>Blog</MenuItems>
             </Box>
 
@@ -80,7 +91,6 @@ const Header = (props) => {
                         variant="outline"
                         aria-label="Logout"
                         icon={AiOutlineLogout}
-                        variantColor="white"
                         onClick={logout}
                     />
                 </Stack>
