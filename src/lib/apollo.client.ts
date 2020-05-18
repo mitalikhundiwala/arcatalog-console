@@ -21,10 +21,25 @@ const requestLink = middlewareLink.concat(httpLink);
 
 export default new ApolloClient({
     link: ApolloLink.from([
-        onError(({ graphQLErrors, networkError }) => {
+        onError(({ graphQLErrors, networkError, operation, forward }) => {
             if (graphQLErrors) {
                 // sendToLoggingService(graphQLErrors);
                 console.log(graphQLErrors);
+                // for (const err of graphQLErrors) {
+                //     switch (err.extensions.code) {
+                //         case 'UNAUTHENTICATED':
+                //             console.log(operation.getContext());
+                //             const oldHeaders = operation.getContext().headers;
+                //         // operation.setContext({
+                //         //     headers: {
+                //         //         ...oldHeaders,
+                //         //         authorization: getNewToken()
+                //         //     }
+                //         // });
+                //         // // retry the request, returning the new observable
+                //         // return forward(operation);
+                //     }
+                // }
             }
             if (networkError) {
                 // logoutUser();
