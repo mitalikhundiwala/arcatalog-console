@@ -4,13 +4,25 @@ import gql from 'graphql-tag';
 import Router from 'next/router';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useToast } from '@chakra-ui/core';
-import CreatableSelect from 'react-select/creatable';
-import * as Yup from 'yup';
 import BookEditor, { BookSchema } from './BookEditor';
 
 const UPDATE_BOOK_MUTATION = gql`
-    mutation updateBook($id: String!, $title: String, $author: [String!]) {
-        updateBook(id: $id, title: $title, author: $author) {
+    mutation updateBook(
+        $id: String!
+        $title: String
+        $author: [String!]
+        $category: String
+        $frontCoverImage: String
+        $backCoverImage: String
+    ) {
+        updateBook(
+            id: $id
+            title: $title
+            author: $author
+            category: $category
+            frontCoverImage: $frontCoverImage
+            backCoverImage: $backCoverImage
+        ) {
             id
         }
     }
@@ -25,6 +37,12 @@ const GET_BOOK = gql`
                 id
                 name
             }
+            category {
+                id
+                name
+            }
+            frontCoverImage
+            backCoverImage
         }
     }
 `;
@@ -35,6 +53,7 @@ const UpdateBook = ({ bookId }) => {
     });
 
     const bookData = data?.getBook;
+    console.log(bookData);
 
     const [
         updateBook,
@@ -74,6 +93,29 @@ const UpdateBook = ({ bookId }) => {
 
     if (!bookData && loading)
         return <CircularProgress isIndeterminate></CircularProgress>;
+
+    let frontCoverImage = [];
+    let backCoverImage = [];
+    if (bookData) {
+        if (bookData.frontCoverImage) {
+            frontCoverImage.push({
+                url: bookData.frontCoverImage,
+                uid: '-1',
+                // name: 'xxx.png',
+                status: 'done'
+            });
+        }
+        if (bookData.backCoverImage) {
+            backCoverImage.push({
+                url: bookData.backCoverImage,
+                uid: '-1',
+                // name: 'xxx.png',
+                status: 'done'
+            });
+        }
+        console.log('bookData', bookData);
+    }
+
     return (
         <>
             <Heading mb="8">Update Book</Heading>
@@ -85,7 +127,13 @@ const UpdateBook = ({ bookId }) => {
                             value: author.id,
                             label: author.name
                         };
-                    })
+                    }),
+                    category: {
+                        value: bookData?.category?.id,
+                        label: bookData?.category?.name
+                    },
+                    frontCoverImage: frontCoverImage,
+                    backCoverImage: backCoverImage
                 }}
                 validationSchema={BookSchema}
                 onSubmit={async (values, actions) => {
@@ -93,7 +141,12 @@ const UpdateBook = ({ bookId }) => {
                         variables: {
                             id: bookId,
                             title: values.title.trim(),
-                            author: values.author?.map((author) => author.label)
+                            author: values.author?.map(
+                                (author) => author.label
+                            ),
+                            category: values.category.value,
+                            frontCoverImage: values.frontCoverImage?.[0]?.url,
+                            backCoverImage: values.backCoverImage?.[0]?.url
                         }
                     });
                 }}

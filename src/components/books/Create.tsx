@@ -7,8 +7,20 @@ import BookEditor, { BookSchema } from './BookEditor';
 import { Heading } from '@chakra-ui/core';
 
 const ADD_BOOK_MUTATION = gql`
-    mutation createBook($title: String!, $author: [String!]!) {
-        createBook(title: $title, author: $author) {
+    mutation createBook(
+        $title: String!
+        $author: [String!]!
+        $category: String
+        $frontCoverImage: String
+        $backCoverImage: String
+    ) {
+        createBook(
+            title: $title
+            author: $author
+            category: $category
+            frontCoverImage: $frontCoverImage
+            backCoverImage: $backCoverImage
+        ) {
             id
         }
     }
@@ -41,14 +53,25 @@ const CreateBook = () => {
         <>
             <Heading mb="8">Add Book</Heading>
             <Formik
-                initialValues={{ title: undefined, author: undefined }}
+                initialValues={{
+                    title: undefined,
+                    author: undefined,
+                    category: undefined,
+                    frontCoverImage: [],
+                    backCoverImage: []
+                }}
                 validationSchema={BookSchema}
                 onSubmit={async (values, actions) => {
                     console.log('values::', values);
                     await createBook({
                         variables: {
                             title: values.title?.trim(),
-                            author: values.author?.map((author) => author.label)
+                            author: values.author?.map(
+                                (author) => author.label
+                            ),
+                            category: values.category.value,
+                            frontCoverImage: values?.frontCoverImage?.[0]?.url,
+                            backCoverImage: values?.backCoverImage?.[0]?.url
                         }
                     });
                 }}

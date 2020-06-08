@@ -12,6 +12,7 @@ const GET_BOOKS = gql`
             author {
                 name
             }
+            frontCoverImage
         }
     }
 `;
@@ -34,13 +35,17 @@ const BookListComponent = () => {
     return (
         <Box className="row">
             {data.getBooks.map((book) => {
+                console.log(book);
                 return (
                     <Box className="col-6 col-md-4 col-lg-3" key={book.id}>
                         <Box maxW="sm" overflow="hidden" mb="8">
                             <Image
-                                src="/images/book-default_.png"
+                                src={book.frontCoverImage}
                                 alt={book.title}
                                 width="100%"
+                                fallbackSrc={'/images/book-default_.png'}
+                                height="280px"
+                                // objectFit="cover"
                             />
 
                             <Box mt="4">

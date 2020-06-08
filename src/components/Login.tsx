@@ -1,7 +1,7 @@
 import React, { useContext, FunctionComponent } from 'react';
 import { Button, Box, Text } from '@chakra-ui/core';
 import Router from 'next/router';
-import { firebase, googleAuthProvider } from '../lib/firebase';
+import { firebase, googleAuthProvider } from '../lib/firebase.auth';
 import UserAdapter from '../services/adapters/user';
 import { UserContext } from '../contexts/user.context';
 

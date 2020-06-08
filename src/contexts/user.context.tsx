@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 import User from '../models/user';
-import { firebase } from '../lib/firebase';
+import { firebase } from '../lib/firebase.auth';
 
 export interface IUserContext {
     user: User | undefined;

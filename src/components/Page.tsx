@@ -8,7 +8,7 @@ import { ThemeProvider, theme, CSSReset, Box } from '@chakra-ui/core';
 import GlobalStyles from '../styles/global.styles';
 import Header from './header';
 import Router from 'next/router';
-import { firebase } from '../lib/firebase';
+import { firebase } from '../lib/firebase.auth';
 import { UserContext } from '../contexts/user.context';
 import UserAdapter from '../services/adapters/user';
 import appTheme from '../styles/theme';
