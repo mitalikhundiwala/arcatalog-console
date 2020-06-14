@@ -4,9 +4,12 @@ import { createHttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
 import fetch from 'node-fetch';
-import { useToast } from '@chakra-ui/core';
 
-const httpLink = createHttpLink({ uri: 'http://localhost:4000', fetch });
+const httpLink = createHttpLink({
+    uri: process.env.NEXT_PUBLIC_GRAPHQL_SERVER_URL,
+    fetch
+});
+
 const middlewareLink = new ApolloLink((operation, forward) => {
     const token = sessionStorage.getItem('AUTH_TOKEN');
     operation.setContext({
